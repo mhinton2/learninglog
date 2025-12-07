@@ -1,0 +1,32 @@
+{% extends "learning_logs/base.html" %}
+
+{% block content %}
+<h2>Task Tracker</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="new_task" placeholder="Add a task..." required>
+    <button type="submit">Add Task</button>
+</form>
+
+<hr>
+
+<h3>Current Tasks</h3>
+<ul>
+    {% for task in tasks %}
+        <li>
+            {% if task.completed %}
+                ✔ {{ task.description }} (completed)
+            {% else %}
+                {{ task.description }}
+                <form method="POST" style="display:inline;">
+                    {% csrf_token %}
+                    <button name="complete" value="{{ task.id }}">Complete</button>
+                </form>
+            {% endif %}
+        </li>
+    {% empty %}
+        <p>No tasks yet.</p>
+    {% endfor %}
+</ul>
+{% endblock %}

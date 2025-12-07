@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "description": "Laundry",
+        "completed": true
+    },
+    {
+        "id": 2,
+        "description": "Laundry",
+        "completed": true
+    },
+    {
+        "id": 3,
+        "description": "Dishes",
+        "completed": true
+    },
+    {
+        "id": 4,
+        "description": "Vacuum",
+        "completed": true
+    },
+    {
+        "id": 5,
+        "description": "Groceries",
+        "completed": false
+    },
+    {
+        "id": 6,
+        "description": "Homework",
+        "completed": false
+    }
+]

@@ -23,4 +23,13 @@ urlpatterns = [
 
     # Page for editing an entry.
     path('edit_entry/<int:entry_id>/', views.edit_entry, name='edit_entry'),
+
+    # Page for task list. 
+    path('tasks/', views.task_list, name="task_list"),
+    
+    # Page for adding tasks with hours (optional).
+    path('tasks/add/', views.add_task_view, name='add_task'),
+    
+    # URL for marking a task as completed.
+    path('tasks/complete/<int:index>/', views.complete_task_view, name='complete_task'),
 ]
