@@ -4,6 +4,7 @@ from django.http import Http404
 
 from .models import Topic, Entry
 from .forms import TopicForm, EntryForm
+from .task_tracker import load_tasks, add_task, complete_task
 
 # Create your views here.
 
@@ -90,3 +91,62 @@ def edit_entry(request, entry_id):
 
     context = {'entry': entry, 'topic': topic, 'form': form}
     return render(request, 'learning_logs/edit_entry.html', context)
+
+@login_required
+def task_list(request):
+    """Display all tasks and handle assing new ones via POST."""
+
+    #Load all existing tasks from the JOSN file.
+    tasks = load_tasks()
+
+    #Check if the request is a POST
+    if request.method == "POST":
+
+        # If the submitted form contains "new_task", the user is adding a task
+        if "new_task" in request.POST:
+            #Add the task using the text submitted
+            add_task(request.POST["new_task"])
+        #If the submitted form contains "complete", the user clicked the 'Complete Task' button
+        elif "complete" in request.POST:
+            # Convert ID from string to int before passing it
+            complete_task(int(request.POST["complete"]))
+
+        #Redirect back to the same page so refreshing doesn't resubmit the form
+        return redirect("learning_logs:task_list")
+    
+    # Render the page with all tasks passed into the template context
+    return render(request, "learning_logs/task_list.html", {"tasks": tasks})
+
+@login_required
+def add_task_view(request):
+    """Add a new task with a title and estimated hours."""
+    
+    #When form is submitted
+    if request.method == "POST":
+        #Retrieve fields from the form
+        title = request.POST["title"]
+        hours = float(request.POST["est_hours"])
+
+        #Pass values to add_task
+        add_task(title, hours)
+
+        #Redirect to main task list
+        return redirect("learning_logs:task_list")
+
+    #Otherwise, show the "add task" form
+    return render(request, "learning_logs/add_task.html")
+
+@login_required
+def complete_task_view(request, index):
+    """Mark a task as complete and log hours spent."""
+
+    #Check if visitor submitted the form
+    if request.method == "POST":
+        hours = float(request.POST["hours_spent"])
+
+        #Mark the task as complete
+        complete_task(index, hours)
+
+        #Return to task list after updating
+        return redirect("learning_logs:task_list")
+

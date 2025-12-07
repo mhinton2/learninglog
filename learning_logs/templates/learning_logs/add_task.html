@@ -1,0 +1,9 @@
+<h1>Add a Task</h1>
+
+<form method="POST">
+  {% csrf_token %}
+  <input type="text" name="title" placeholder="Task title">
+  <input type="number" step="0.1" name="est_hours" placeholder="Estimated hours">
+  <button>Add Task</button>
+</form>
+
